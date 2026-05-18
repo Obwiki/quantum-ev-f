@@ -1,0 +1,15 @@
+# Quantum Event Forge demo scenario
+seed "orbit-cactus-42"
+clock 0..120 step 5
+
+entity drone-1 kind drone energy=87 zone="alpha"
+entity drone-2 kind drone energy=41 zone="beta"
+entity relay kind station energy=100 zone="alpha"
+
+rule low-energy when energy < 50 every 10 emit recharge priority 4
+rule relay-pulse when kind == "station" every 15 emit pulse priority 2
+rule drift when zone == "alpha" every 20 emit zone-shift priority 1
+
+on recharge set energy += 25 trace "battery patched"
+on pulse set energy -= 7 trace "relay pulse tax"
+on zone-shift set zone = "gamma" trace "entity drifted"
